@@ -1,6 +1,6 @@
 require("dotenv").config();
 const mongoose=require('mongoose');
-const token=require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 //signup schema
 
@@ -8,7 +8,6 @@ const UserSchema=new mongoose.Schema({
     username:{
         type:String,
         required:true,
-        unique:true
     },
     email:{
         type:String,
@@ -38,7 +37,7 @@ const UserSchema=new mongoose.Schema({
 //integrating the bycrypt here
 
 UserSchema.pre('save',async function(next){
-    if(!isModified('password')){
+    if(!this.isModified('password')){
         return next();
     }
 
@@ -53,11 +52,17 @@ UserSchema.pre('save',async function(next){
 })
 
 
-// ✅ Method to compare passwords (for login)
+// Method to compare passwords (for login)
 UserSchema.methods.comparePassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
 
+UserSchema.methods.generateToken = function () {
+  const jwt = require('jsonwebtoken');
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+};
 
 
 const User=mongoose.model('User',UserSchema);
