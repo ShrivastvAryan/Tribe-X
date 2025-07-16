@@ -32,6 +32,7 @@ io.on('connection',(socket)=>{ //this is circuit formation
 
     socket.on('message',(data)=>{
         console.log(data);
+        io.emit('receive-message',data)
     })
 
     socket.on('disconnect',()=>{

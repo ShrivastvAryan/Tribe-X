@@ -23,6 +23,10 @@ const User=()=>{
     })
   });
 
+  socket.on('receive-message', (data) => {
+    console.log("Received:", data);
+  });
+
   return()=>{
     socket.disconnect();
   }
@@ -105,7 +109,7 @@ const User=()=>{
             onChange={(e)=>setMessage(e.target.value)}
             placeholder="Type a message..."
           />
-          <button type="button"  className="h-full aspect-square bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex justify-center items-center hover:from-purple-600 hover:to-pink-600 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg">
+          <button type="submit"  className="h-full aspect-square bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex justify-center items-center hover:from-purple-600 hover:to-pink-600 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg">
             <SendHorizontal className="text-white" size={20} />
           </button>
         </div>
