@@ -1,11 +1,32 @@
-import { useState,useEffect } from "react";
-import React from "react";
-import { Header } from "../Components/Layout/Header";
-import { Footer } from "../Components/Layout/Footer";
+import { useState,useEffect,useMemo } from "react";
 import { AnimatedBackground } from "../Components/ui/AnimatedBackground";
 import { Target, MessageCircle, UserPlus, MapPin,SendHorizonal, SendHorizontal } from "lucide-react";
+import {io} from "socket.io-client"
 
 const User=()=>{
+
+  const socket=useMemo(()=>io('http://localhost:5000'),[])
+
+  const [message,setMessage]=useState('') 
+
+  const handleSubmit=(e)=>{
+    e.preventDefault()
+    socket.emit("message",message)
+    setMessage("");
+  }
+
+
+ useEffect(() => {
+  socket.on('connect', () => {
+    socket.on('welcome',(s)=>{
+      console.log(s)
+    })
+  });
+
+  return()=>{
+    socket.disconnect();
+  }
+  },[])
 
 
      const profiles = [
@@ -76,16 +97,19 @@ const User=()=>{
         </div>
 
         {/* Message Input */}
+        <form onSubmit={handleSubmit}>
         <div className="w-full h-14 p-2 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/20 flex items-center gap-3">
           <input 
             className="flex-1 h-full bg-white/10 backdrop-blur-sm text-white placeholder-white/50 rounded-xl px-4 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:border-transparent transition-all duration-200" 
             type="text"
+            onChange={(e)=>setMessage(e.target.value)}
             placeholder="Type a message..."
           />
-          <button className="h-full aspect-square bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex justify-center items-center hover:from-purple-600 hover:to-pink-600 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg">
+          <button type="button"  className="h-full aspect-square bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex justify-center items-center hover:from-purple-600 hover:to-pink-600 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg">
             <SendHorizontal className="text-white" size={20} />
           </button>
         </div>
+        </form>
       </div>
     </div>
   </div>
