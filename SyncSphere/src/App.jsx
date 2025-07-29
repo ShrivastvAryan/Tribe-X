@@ -4,12 +4,12 @@ import { Home } from "./Pages/Home";
 import { About } from "./Pages/About";
 import { Connect } from "./Pages/Connect";
 import { Contact } from "./Pages/Contact";
-import { HomeRough } from "./Pages/HomeRough";
 import { Registration } from "./Pages/Registration";
 import { AppLayout } from "./Components/Layout/AppLayout";
 import { Login } from "./Pages/Login";
 import { UserProfile } from "./Pages/UserProfile";
 import User from "./Pages/User";
+import { ProfileEdit } from "./Pages/ProfileEdit";
 
 export const App = () => {
   const router = createBrowserRouter([
@@ -35,13 +35,9 @@ export const App = () => {
           element: <Contact />,
         },
         {
-          path: "/HomeRough",
-          element: <HomeRough />,
-        },
-        {
           path: "/user",
           element: <User />,
-       },
+        },
       ],
     },
     {
